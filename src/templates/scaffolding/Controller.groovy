@@ -6,6 +6,10 @@ import static grails.plugin.gson.http.HttpConstants.*
 
 class ${className}Controller {
 
+    def index() {
+
+    }
+
 	def list(Integer max) {
 		params.max = Math.min(max ?: 10, 100)
 		response.addIntHeader X_PAGINATION_TOTAL, ${className}.count()
@@ -26,7 +30,7 @@ class ${className}Controller {
 		}
 	}
 
-	def show() {
+	def get() {
 		def ${propertyName} = ${className}.get(params.id)
 		if (${propertyName}) {
 			respondFound ${propertyName}
