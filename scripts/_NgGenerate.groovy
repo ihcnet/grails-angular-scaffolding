@@ -130,7 +130,9 @@ class DeepAngularTemplateGenerator extends DefaultGrailsTemplateGenerator {
                 domainClass: domainClass,
                 cp: cp,
                 domainInstance: getPropertyName(domainClass),
-                prefix: prefix
+                prefix: prefix,
+                grailsApp: grailsApplication,
+                event: event
         ]
         renderEditorTemplate.make(binding).toString()
     }
@@ -163,7 +165,9 @@ class DeepAngularTemplateGenerator extends DefaultGrailsTemplateGenerator {
                     className: domainClass.shortName,
                     propertyName: getPropertyName(domainClass),
                     renderEditor: renderEditor,
-                    comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator]
+                    comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator,
+                    grailsApp: grailsApplication,
+                    event: event]
 
             t.make(binding).writeTo(out)
         }
@@ -268,7 +272,8 @@ class AngularTemplateGenerator extends DefaultGrailsTemplateGenerator {
 					className: domainClass.shortName,
 					propertyName: getPropertyName(domainClass),
 					renderEditor: renderEditor,
-					comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator]
+					comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator
+            ]
 
 			t.make(binding).writeTo(out)
 		}

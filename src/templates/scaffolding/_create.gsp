@@ -36,15 +36,23 @@
 			display = (cp ? cp.display : true)
 			required = (cp ? !(cp.propertyType in [boolean, Boolean]) && !cp.nullable && (cp.propertyType != String || !cp.blank) : false)
 		}
-		if (display) { %>
-	<div class="control-group" data-ng-class="{error: errors.${prefix}${p.name}}">
-		<label class="control-label" for="${prefix}${p.name}">${p.naturalName}</label>
-		<div class="controls">
+        if (display) {
+            event 'StatusUpdate', ['Checking if ' + p.type.name + ' is a domain class.']
+            if (grailsApp.isDomainClass(p.type)) {
+                event 'StatusUpdate', [p.type.name + ' is a domain class. Calling render.']
+                println renderEditor(p, prefix)
+            } else {
+                event 'StatusUpdate', [p.type.name + " not a domain class, using default rendering."]
+%>
+    <div class="control-group" data-ng-class="{error: errors.${prefix}${p.name}}">
+        <label class="control-label" for="${prefix}${p.name}">${p.naturalName}</label>
+        <div class="controls">
             ${renderEditor(p, prefix)}
-			<span class="help-inline" data-ng-show="errors.${prefix}${p.name}">{{errors.${prefix}${p.name}}}</span>
-		</div>
-	</div>
-	<%  }   } %>
+            <span class="help-inline" data-ng-show="errors.${prefix}${p.name}">{{errors.${prefix}${p.name}}}</span>
+        </div>
+    </div>
+
+    <% }  }   } %>
 	<div class="form-actions">
 		<button type="submit" class="btn btn-primary" data-ng-disabled="form.\$invalid"><i class="icon-ok"></i> Create</button>
 	</div>
