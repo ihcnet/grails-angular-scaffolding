@@ -35,12 +35,12 @@ var scaffoldingModule = angular.module('scaffolding', ['grailsService', 'flashSe
 scaffoldingModule.config([
     '$routeProvider',
     function($routeProvider) {
-        var baseUrl = $('body').data('template-url');
+        var baseUrl = $('body').data('base-url');
         $routeProvider.
-            when('/create', {templateUrl: baseUrl + '/create.html', controller: CreateCtrl}).
-            when('/edit/:id', {templateUrl: baseUrl + '/edit.html', controller: EditCtrl}).
-            when('/list', {templateUrl: baseUrl + '/list.html', controller: ListCtrl}).
-            when('/show/:id', {templateUrl: baseUrl + '/show.html', controller: ShowCtrl}).
+            when('/create', {templateUrl: baseUrl + 'createForm', controller: CreateCtrl}).
+            when('/edit/:id', {templateUrl: baseUrl + 'editForm', controller: EditCtrl}).
+            when('/list', {templateUrl: baseUrl + 'listForm', controller: ListCtrl}) .
+            when('/show/:id', {templateUrl: baseUrl + 'showForm', controller: ShowCtrl}).
             otherwise({redirectTo: '/list'});
     }
 ]);
@@ -216,10 +216,10 @@ function ShowCtrl($scope, $routeParams, $location, Grails, Flash) {
 }
 
 function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
-//    $scope.item = new Grails;
-    Grails.create($routeParams, function(item) {
-        $scope.item = item;
-    }, errorHandler.curry($scope, $location, Flash));
+    $scope.item = new Grails;
+//    Grails.create($routeParams, function(item) {
+//        $scope.item = item;
+//    }, errorHandler.curry($scope, $location, Flash));
 
     $scope.save = function(item) {
         item.$save(function(response) {

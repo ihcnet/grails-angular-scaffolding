@@ -14,6 +14,22 @@ class ${className}Controller {
         render new ${className}() as GSON
     }
 
+    def createForm() {
+
+    }
+
+    def editForm() {
+
+    }
+
+    def listForm() {
+
+    }
+
+    def showForm() {
+
+    }
+
 	def list(Integer max) {
 		params.max = Math.min(max ?: 10, 100)
 		response.addIntHeader X_PAGINATION_TOTAL, ${className}.count()

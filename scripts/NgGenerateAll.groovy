@@ -7,5 +7,5 @@ target(default: 'Generates a CRUD interface (controller + Angular JS views) for 
 	generateController = true
 	generateForName = argsMap.params[0]
 
-	generateForOne()
+	generateForAll()
 }

@@ -41,7 +41,7 @@ target(generateForAll: 'Generates controllers and views for only one domain clas
 
     def name = generateForName
     name = name.indexOf('.') > 0 ? name : GrailsNameUtils.getClassNameRepresentation(name)
-    def domainClass = grailsApp.getDomainClass(name)
+    GrailsDomainClass domainClass = grailsApp.getDomainClass(name)
 
     if (!domainClass) {
         grailsConsole.updateStatus 'Domain class not found in grails-app/domain, trying hibernate mapped classes...'
@@ -51,7 +51,17 @@ target(generateForAll: 'Generates controllers and views for only one domain clas
 
     if (domainClass) {
         generateForDomainClass(domainClass)
-        genSubForAll()
+        def properties = domainClass.getProperties()
+        properties.each {
+            if (grailsApp.isDomainClass(it.type)) {
+                event 'StatusUpdate', ["Generating view for property ${it.name}."]
+                event 'StatusUpdate', ["Retrieving domain class for property ${it.name} of type ${it.type.name}."]
+                GrailsDomainClass propDomainClass = grailsApp.getDomainClass(it.type.name)
+                genSubForAll(propDomainClass)
+            } else {
+                event 'StatusUpdate', ["Property ${it.name} isn't a domain class."]
+            }
+        }
         event 'StatusFinal', ["Finished generation for domain class ${domainClass.fullName}"]
     }
     else {
@@ -60,26 +70,14 @@ target(generateForAll: 'Generates controllers and views for only one domain clas
     }
 }
 
-def genSubForAll() {
-    depends compile, loadApp
-
-    def name = generateForName
-    name = name.indexOf('.') > 0 ? name : GrailsNameUtils.getClassNameRepresentation(name)
-    def domainClass = grailsApp.getDomainClass(name)
-
-    if (!domainClass) {
-        grailsConsole.updateStatus 'Domain class not found in grails-app/domain, trying hibernate mapped classes...'
-        bootstrap()
-        domainClass = grailsApp.getDomainClass(name)
-    }
+def genSubForAll(GrailsDomainClass domainClass) {
 
     if (domainClass) {
         generateForDomainClass(domainClass)
-        generateForAll()
-        event 'StatusFinal', ["Finished generation for domain class ${domainClass.fullName}"]
+        event 'StatusUpdate', ["Finished generation for domain class ${domainClass.fullName}"]
     }
     else {
-        event 'StatusFinal', ["No domain class found for name ${name}. Please try again and enter a valid domain class name"]
+        event 'StatusUpdate', ["No domain class found for name ????. Please try again and enter a valid domain class name"]
         exit 1
     }
 }
@@ -173,9 +171,8 @@ class DeepAngularTemplateGenerator extends DefaultGrailsTemplateGenerator {
 
     @Override
     void generateView(GrailsDomainClass domainClass, String viewName, String destDir) {
-        def suffix = viewName.find(/\.\w+$/)
-
-        def viewsDir = suffix == '.html' ? new File("$destDir/web-app/ng-templates/$domainClass.propertyName") : new File("$destDir/grails-app/views/$domainClass.propertyName")
+        def prefix = viewName.substring(0, 1)
+        def viewsDir = prefix == '_' ? new File("$destDir/grails-app/views/ng-templates/$domainClass.propertyName") : new File("$destDir/grails-app/views/$domainClass.propertyName")
         if (!viewsDir.exists()) viewsDir.mkdirs()
 
         def destFile = new File(viewsDir, "$viewName")
@@ -189,6 +186,7 @@ class DeepAngularTemplateGenerator extends DefaultGrailsTemplateGenerator {
         def resources = []
         def resolver = new PathMatchingResourcePatternResolver()
         def templatesDirPath = "${basedir}/src/templates/scaffolding"
+
         def templatesDir = new FileSystemResource(templatesDirPath)
         if (templatesDir.exists()) {
             try {
