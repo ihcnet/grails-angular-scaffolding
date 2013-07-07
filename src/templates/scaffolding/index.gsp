@@ -8,7 +8,9 @@
         <title><g:message code="default.list.label" args="[entityName]" /></title>
         <link rel="stylesheet" href="\${resource(dir: 'css', file: 'main.css')}" type="text/css">
         <link rel="stylesheet" href="\${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
-
+        <r:require module="angular"/>
+        <r:require module="angular-resource"/>
+        <r:require module="angular-grails-default"/>
         <r:require module="angular-scaffolding"/>
     </head>
     <body data-ng-app="scaffolding" data-base-url="\${createLink(uri: '/${domainClass.propertyName}/')}">

@@ -10,6 +10,10 @@ class ${className}Controller {
 
     }
 
+    def create() {
+        render new ${className}() as GSON
+    }
+
 	def list(Integer max) {
 		params.max = Math.min(max ?: 10, 100)
 		response.addIntHeader X_PAGINATION_TOTAL, ${className}.count()

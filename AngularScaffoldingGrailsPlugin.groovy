@@ -1,6 +1,6 @@
 class AngularScaffoldingGrailsPlugin {
 
-    def version = '1.0.6-SNAPSHOT'
+    def version = '1.0.7-SNAPSHOT'
     def grailsVersion = '2.0 > *'
     def dependsOn = [gson:"1.1.4"]
     def pluginExcludes = []

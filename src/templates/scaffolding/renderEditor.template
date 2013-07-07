@@ -1,23 +1,52 @@
 <%
 	def name = prefix ? "${prefix}${property.name}" : property.name
 
-    switch (property.type) {
-        case Boolean:
-        case boolean:
+    if (property.type == Boolean || property.type == boolean)
             out << renderBooleanEditor(domainClass, property, name)
-            break
-        case Number:
-        case byte:
-        case short:
-        case int:
-        case long:
-        case float:
-        case double:
+        else if (property.type && Number.isAssignableFrom(property.type) || (property.type?.isPrimitive() && property.type != boolean))
             out << renderNumberEditor(domainClass, property, name)
-            break
-        case String:
+        else if (property.type == String)
             out << renderStringEditor(domainClass, property, name)
-            break
+        else if (property.type == Date || property.type == java.sql.Date || property.type == java.sql.Time || property.type == Calendar)
+            out << renderDateEditor(domainClass, property)
+        else if (property.type == URL)
+            out << renderStringEditor(domainClass, property, name)
+        else if (property.type && property.isEnum())
+            out << renderEnumEditor(domainClass, property)
+        else if (property.type == TimeZone)
+            out << renderSelectTypeEditor("timeZone", domainClass, property)
+        else if (property.type == Locale)
+            out << renderSelectTypeEditor("locale", domainClass, property)
+        else if (property.type == Currency)
+            out << renderSelectTypeEditor("currency", domainClass, property)
+        else if (property.type==([] as Byte[]).class) //TODO: Bug in groovy means i have to do this :(
+            out << renderByteArrayEditor(domainClass, property)
+        else if (property.type==([] as byte[]).class) //TODO: Bug in groovy means i have to do this :(
+            out << renderByteArrayEditor(domainClass, property)
+        else if (property.manyToOne || property.oneToOne)
+            out << renderManyToOne(domainClass, property, name)
+        else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide())) {
+            def str = renderManyToOne(domainClass, property, name)
+            if (str != null) {
+                out << str
+            }
+        }
+        else if (property.oneToMany)
+            out << renderOneToMany(domainClass, property)
+
+    private renderManyToOne(domainClass, property, name) {
+        if (property.association) {
+            def sb = new StringBuilder()
+            sb << '<select data-ng-model="item.' << name << '"'
+            sb << ' id="' << name << '"'
+            sb << ' name="' << name << '"'
+                sb << ' ngOptions="x.' << property.type.simpleName.toLowerCase() << ' for x in ' << capitalizeFirstLetter(property.type.simpleName) << '"'
+            if (isRequired()) {
+                sb << ' required'
+            }
+                sb << '/>'
+            sb as String
+        }
     }
 
     private String renderBooleanEditor(domainClass, property, name) {
@@ -73,9 +102,19 @@
 
     private boolean isOptional() {
         if (!cp) {
+            //println "it is null"
             return false
         } else {
-            cp.nullable || (cp.propertyType == String && cp.blank) || cp.propertyType in [boolean, Boolean]
+            /* println "it is something else"
+            println 'is nullable ' + cp.nullable
+            println 'property type: ' + cp.propertyType
+            println 'blank ' + cp.blank
+            println 'returning: ' + cp.nullable || (cp.propertyType == String && cp.blank) || cp.propertyType in [boolean, Boolean] || (cp.propertyType == int && cp.blank) */
+            cp.nullable || (cp.propertyType == String && cp.blank) || cp.propertyType in [boolean, Boolean] || (cp.propertyType == int && cp.blank)
         }
+    }
+
+    private String capitalizeFirstLetter(String input) {
+        return input.substring(0, 1).toUpperCase() + input.substring(1)
     }
 %>
