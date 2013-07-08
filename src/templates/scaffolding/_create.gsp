@@ -1,4 +1,5 @@
 <% import grails.persistence.Event %>
+<g:set var="thisSubPrefix" value="\${subPrefix ? subPrefix + '.' : ''}"/>
     <%  excludedProps = Event.allEvents.toList() << 'version' << 'dateCreated' << 'lastUpdated'
     persistentPropNames = domainClass.persistentProperties*.name
     boolean hasHibernate = pluginManager?.hasGrailsPlugin('hibernate')
@@ -47,11 +48,11 @@
             } else {
                 event 'StatusUpdate', [p.type.name + " not a domain class, using default rendering."]
 %>
-    <div class="control-group" data-ng-class="{error: errors.${prefix}${p.name}}">
-        <label class="control-label" for="${prefix}${p.name}">${p.naturalName}</label>
+    <div class="control-group" data-ng-class="{error: errors.${prefix}\${thisSubPrefix}${p.name}}">
+        <label class="control-label" for="${prefix}\${thisSubPrefix}${p.name}">${p.naturalName}</label>
         <div class="controls">
             ${renderEditor(p, prefix)}
-            <span class="help-inline" data-ng-show="errors.${prefix}${p.name}">{{errors.${prefix}${p.name}}}</span>
+            <span class="help-inline" data-ng-show="errors.${prefix}\${thisSubPrefix}${p.name}">{{errors.${prefix}\${thisSubPrefix}${p.name}}}</span>
         </div>
     </div>
 

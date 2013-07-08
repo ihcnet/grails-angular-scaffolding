@@ -5,7 +5,7 @@
 <alert level="{{message.level}}" text="{{message.text}}"/>
 
 <form name="form" data-ng-submit="save(item)" class="form-horizontal">
-    <g:render template="/ng-templates/${domainClass.propertyName}/create" model="[subPreFix: ${domainClass.propertyName}]"/>
+    <g:render template="/ng-templates/${domainClass.propertyName}/create"/>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary" data-ng-disabled="form.\$invalid"><i class="icon-ok"></i> Create
         </button>

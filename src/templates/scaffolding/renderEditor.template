@@ -37,7 +37,7 @@
     private renderManyToOne(domainClass, property, name) {
         if (property.association) {
             def sb = new StringBuilder()
-            sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: subPrefix]" />'
+            sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: \'' << name << '\']" />'
             sb as String
         }
     }
@@ -47,7 +47,7 @@
         sb << '<input type="checkbox"'
         sb << ' id="' << name << '"'
         sb << ' name="' << name << '"'
-        sb << ' data-ng-model="item.' << name << '"'
+        sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
         sb << '>'
         sb as String
     }
@@ -59,7 +59,7 @@
             sb << ' type="range"'
 			sb << ' id="' << name << '"'
 			sb << ' name="' << name << '"'
-			sb << ' data-ng-model="item.' << name << '"'
+			sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
 			sb << ' min="' << cp.range.from << '"'
 			sb << ' max="' << cp.range.to << '"'
 			sb << '<output for="' << name << '">{{' << name << '}}</output>'
@@ -68,7 +68,7 @@
 			else sb << ' type="number"'
 			sb << ' id="' << name << '"'
 			sb << ' name="' << name << '"'
-			sb << ' data-ng-model="item.' << name << '"'
+			sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
 			if (cp.min != null) sb << ' min="' << cp.min << '"'
 			if (cp.max != null) sb << ' max="' << cp.max << '"'
 			if (isRequired()) sb << ' required'
@@ -82,7 +82,7 @@
         sb << '<input type="text"'
         sb << ' id="' << name << '"'
         sb << ' name="' << name << '"'
-        sb << ' data-ng-model="item.' << name << '"'
+        sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
         if (cp.matches) sb << ' pattern="' << cp.matches << '"'
         if (isRequired()) sb << ' required'
         sb << '>'
