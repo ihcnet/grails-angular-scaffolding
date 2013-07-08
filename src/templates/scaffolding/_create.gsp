@@ -46,7 +46,8 @@
                 event 'StatusUpdate', ["Found generic type to be: " + p.referencedPropertyType + "."]
                 if (grailsApp.isDomainClass(p.referencedPropertyType)) {
                     event 'StatusUpdate', ["Generic type: " + p.type.name + ' is a domain class. Calling render.']
-                    println renderEditor(p, prefix, 'createMany')
+                    // println renderEditor(p, prefix, 'createMany') // To Do handle has many.
+                    println renderEditor(p, prefix, 'create')
                 }
             } else {
                 event 'StatusUpdate', [p.type.name + " not a domain class, using default rendering."]
