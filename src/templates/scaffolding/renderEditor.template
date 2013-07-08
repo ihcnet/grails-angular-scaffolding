@@ -37,14 +37,7 @@
     private renderManyToOne(domainClass, property, name) {
         if (property.association) {
             def sb = new StringBuilder()
-            sb << '<select data-ng-model="item.' << name << '"'
-            sb << ' id="' << name << '"'
-            sb << ' name="' << name << '"'
-                sb << ' ngOptions="x.' << property.type.simpleName.toLowerCase() << ' for x in ' << capitalizeFirstLetter(property.type.simpleName) << '"'
-            if (isRequired()) {
-                sb << ' required'
-            }
-                sb << '/>'
+            sb << '<g:render template="/ng-templates/' << property.type.simpleName.toLowerCase() << '/' << gspTemplateName << '" />'
             sb as String
         }
     }

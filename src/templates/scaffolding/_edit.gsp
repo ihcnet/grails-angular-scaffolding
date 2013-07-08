@@ -42,7 +42,7 @@
             event 'StatusUpdate', ['Checking if ' + p.type.name + ' is a domain class.']
             if (grailsApp.isDomainClass(p.type)) {
                 event 'StatusUpdate', [p.type.name + ' is a domain class. Calling render.']
-                println renderEditor(p, prefix)
+                println renderEditor(p, prefix, 'edit')
             } else {
                 event 'StatusUpdate', [p.type.name + " not a domain class, using default rendering."]
 %>
