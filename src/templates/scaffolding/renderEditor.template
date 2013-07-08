@@ -37,7 +37,7 @@
     private renderManyToOne(domainClass, property, name) {
         if (property.association) {
             def sb = new StringBuilder()
-            sb << '<g:render template="/ng-templates/' << property.type.simpleName.toLowerCase() << '/' << gspTemplateName << '" />'
+            sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" />'
             sb as String
         }
     }
