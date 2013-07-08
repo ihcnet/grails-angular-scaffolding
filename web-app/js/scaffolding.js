@@ -216,10 +216,10 @@ function ShowCtrl($scope, $routeParams, $location, Grails, Flash) {
 }
 
 function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
-    $scope.item = new Grails;
-//    Grails.create($routeParams, function(item) {
-//        $scope.item = item;
-//    }, errorHandler.curry($scope, $location, Flash));
+//    $scope.item = new Grails;
+    Grails.create($routeParams, function(item) {
+        $scope.item = item;
+    }, errorHandler.curry($scope, $location, Flash));
 
     $scope.save = function(item) {
         item.$save(function(response) {

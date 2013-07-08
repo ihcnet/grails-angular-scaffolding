@@ -1,1 +1,1 @@
-<g:render template=""/>
+<g:render template="/ng-templates/${domainClass.propertyName}/show"/>
