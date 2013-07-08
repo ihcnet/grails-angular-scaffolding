@@ -53,17 +53,20 @@ target(generateForAll: 'Generates controllers and views for only one domain clas
         generateForDomainClass(domainClass)
         def properties = domainClass.getProperties()
         properties.each {
+            event 'StatusUpdate', ["${it.name} of ${it.type.name} is an instance of set: ${it.type.name.equals("java.util.Set").toString()}"]
+            event 'StatusUpdate', ["ReferenceType: ${it.referencedPropertyType.name}"]
             if (grailsApp.isDomainClass(it.type)) {
                 event 'StatusUpdate', ["Generating view for property ${it.name}."]
                 event 'StatusUpdate', ["Retrieving domain class for property ${it.name} of type ${it.type.name}."]
                 GrailsDomainClass propDomainClass = grailsApp.getDomainClass(it.type.name)
                 genSubForAll(propDomainClass)
+            } else if (it.type.name.equals("java.util.Set") && (grailsApp.isDomainClass(it.referencedPropertyType))) {
+                event 'StatusUpdate', ["${it.name} is an instance of Set"]
+                event 'StatusUpdate', ["Found generic type to be: ${it.referencedPropertyType.name}"]
+                GrailsDomainClass propDomainClass = grailsApp.getDomainClass(it.referencedPropertyType.name)
+                event 'StatusUpdate', ["Found generic type to be: Name: ${it.name} Type: ${propDomainClass.name}"]
+                genSubForAll(propDomainClass)
             }
-//            else if (it instanceof Set) {
-//                event 'StatusUpdate', ["${it.name} is an instance of Set"]
-//                GrailsDomainClass propDomainClass = grailsApp.getDomainClass(it.genericType.name)
-//                genSubForAll(propDomainClass)
-//            }
             else
             {
                 event 'StatusUpdate', ["Property ${it.name} isn't a domain class."]
