@@ -1,4 +1,5 @@
 <% import grails.persistence.Event %>
+<g:set var="${domainClass.name}SubPrefix" value="\${subPrefix ? subPrefix + '.' : ''}"/>
 <div class="page-header">
     <h1>${className} List</h1>
 </div>
@@ -20,9 +21,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr data-ng-repeat="item in list">
+    <tr data-ng-repeat="x in item.\${subPrefix}">
         <%  for (p in props) { %>
-        <td>{{item.${p.name}}}</td>
+        <td>{{x.${p.name}}}</td>
         <%  } %>
     </tr>
     </tbody>

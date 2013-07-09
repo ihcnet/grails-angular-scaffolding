@@ -229,12 +229,13 @@ function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
     };
 
     $scope.addItem = function(itemToPush, pathToArrayItem) {
+        var itp = jQuery.extend({}, itemToPush);
         switch(pathToArrayItem.length) {
             case 1:
                 if ($scope.item[pathToArrayItem[0]] === undefined) {
                     $scope.item[pathToArrayItem[0]] = []
                 }
-                $scope.item[pathToArrayItem[0]].push(itemToPush);
+                $scope.item[pathToArrayItem[0]].push(itp);
                 break;
             case 2:
                 initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
