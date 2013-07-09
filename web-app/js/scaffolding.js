@@ -49,13 +49,13 @@ scaffoldingModule.config([
  * A directive for including an alert message in the page.
  */
 scaffoldingModule.directive('alert', function() {
-	var baseUrl = $('body').data('common-template-url');
-	return {
+    var baseUrl = $('body').data('common-template-url');
+    return {
         restrict: 'E', // can only be used as an element
         transclude: false, // the element should not contain any content so there's no need to transclude
         scope: {
-			level: '@level',
-			text: '@text'
+            level: '@level',
+            text: '@text'
         },
         templateUrl: baseUrl + '/alert.html',
         replace: true
@@ -66,8 +66,8 @@ scaffoldingModule.directive('alert', function() {
  * A directive for including a standard pagination block in the page.
  */
 scaffoldingModule.directive('pagination', function() {
-	var baseUrl = $('body').data('common-template-url');
-	return {
+    var baseUrl = $('body').data('common-template-url');
+    return {
         restrict: 'A', // can only be used as an attribute
         transclude: false, // the element should not contain any content so there's no need to transclude
         scope: {
@@ -89,21 +89,21 @@ scaffoldingModule.directive('pagination', function() {
                 return $scope.pages().slice(-1)[0];
             };
 
-			$scope.previousPage = function() {
-				var offset = $scope.offset - $scope.max;
-				if (offset < 0) {
-					offset = 0;
-				}
-				$location.search('offset', offset);
-			};
+            $scope.previousPage = function() {
+                var offset = $scope.offset - $scope.max;
+                if (offset < 0) {
+                    offset = 0;
+                }
+                $location.search('offset', offset);
+            };
 
-			$scope.nextPage = function() {
-				$location.search('offset', $scope.offset + $scope.max);
-			};
+            $scope.nextPage = function() {
+                $location.search('offset', $scope.offset + $scope.max);
+            };
 
-			$scope.goToPage = function(n) {
-				$location.search('offset', n * $scope.max);
-			};
+            $scope.goToPage = function(n) {
+                $location.search('offset', n * $scope.max);
+            };
         },
         templateUrl: baseUrl + '/pagination.html',
         replace: false
@@ -114,44 +114,44 @@ scaffoldingModule.directive('pagination', function() {
  * A directive for making a table header sortable.
  */
 scaffoldingModule.directive('sortable', function() {
-	var baseUrl = $('body').data('common-template-url');
-	return {
-		restrict: 'A',
-		transclude: true,
-		scope: {
-			property: '@sortable'
-		},
-		controller: function($scope, $routeParams, $location) {
-			$scope.isSortedBy = function() {
-				return $routeParams.sort === $scope.property;
-			};
+    var baseUrl = $('body').data('common-template-url');
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            property: '@sortable'
+        },
+        controller: function($scope, $routeParams, $location) {
+            $scope.isSortedBy = function() {
+                return $routeParams.sort === $scope.property;
+            };
 
-			$scope.isSortedByAscending = function() {
-				return $scope.isSortedBy() && $routeParams.order !== 'desc';
-			};
+            $scope.isSortedByAscending = function() {
+                return $scope.isSortedBy() && $routeParams.order !== 'desc';
+            };
 
-			$scope.isSortedByDescending = function() {
-				return $scope.isSortedBy() && $routeParams.order === 'desc';
-			};
+            $scope.isSortedByDescending = function() {
+                return $scope.isSortedBy() && $routeParams.order === 'desc';
+            };
 
-			$scope.sort = function() {
-				var order;
-				if ($scope.isSortedByAscending()) {
-					order = 'desc';
-				} else {
-					order = 'asc';
-				}
-				$location.search('sort', $scope.property).search('order', order);
-			};
-		},
-		link: function(scope, element) {
-			element.bind('click', function() {
-				scope.$apply(scope.sort);
-			});
-		},
-		templateUrl: baseUrl + '/sortable.html',
-		replace: false
-	}
+            $scope.sort = function() {
+                var order;
+                if ($scope.isSortedByAscending()) {
+                    order = 'desc';
+                } else {
+                    order = 'asc';
+                }
+                $location.search('sort', $scope.property).search('order', order);
+            };
+        },
+        link: function(scope, element) {
+            element.bind('click', function() {
+                scope.$apply(scope.sort);
+            });
+        },
+        templateUrl: baseUrl + '/sortable.html',
+        replace: false
+    }
 });
 
 function toArray(element) {
@@ -195,9 +195,9 @@ function ListCtrl($scope, $routeParams, $location, Grails, Flash) {
         $scope.message = Flash.getMessage();
     }, errorHandler.curry($scope, $location, Flash));
 
-	$scope.show = function(item) {
-		$location.path('/show/' + item.id);
-	};
+    $scope.show = function(item) {
+        $location.path('/show/' + item.id);
+    };
 }
 
 function ShowCtrl($scope, $routeParams, $location, Grails, Flash) {
@@ -216,10 +216,10 @@ function ShowCtrl($scope, $routeParams, $location, Grails, Flash) {
 }
 
 function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
-//    $scope.item = new Grails;
-    Grails.create($routeParams, function(item) {
-        $scope.item = item;
-    }, errorHandler.curry($scope, $location, Flash));
+    $scope.item = new Grails;
+//    Grails.create($routeParams, function(item) {
+//        $scope.item = item;
+//    }, errorHandler.curry($scope, $location, Flash));
 
     $scope.save = function(item) {
         item.$save(function(response) {
@@ -229,22 +229,43 @@ function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
     };
 
     $scope.addItem = function(itemToPush, pathToArrayItem) {
-//        for (var i = 0; i < pathToArrayItem.length; i++) {
-//            var currentItem = $scope.item;
-//
-//        }
-        var i = 0;
-        var currentItem = $scope.item;
-        while (i < pathToArrayItem.length) {
-            var associativeName = pathToArrayItem[i];
-            currentItem = currentItem[associativeName];
-            i++;
+        switch(pathToArrayItem.length) {
+            case 1:
+                if ($scope.item[pathToArrayItem[0]] === undefined) {
+                    $scope.item[pathToArrayItem[0]] = []
+                }
+                $scope.item[pathToArrayItem[0]].push(itemToPush);
+                break;
+            case 2:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 3:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 4:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 5:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 6:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 7:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 8:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 9:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            case 10:
+                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                break;
+            default:
+                throw "nested too deep"
         }
-        currentItem.push(itemToPush);
-    };
-
-    $scope.initArray = function(property) {
-        return [];
     };
 }
 
