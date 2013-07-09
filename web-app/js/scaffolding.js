@@ -238,6 +238,7 @@ function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
         while (i < pathToArrayItem.length) {
             var associativeName = pathToArrayItem[i];
             currentItem = currentItem[associativeName];
+            i++;
         }
         currentItem.push(itemToPush);
     };
