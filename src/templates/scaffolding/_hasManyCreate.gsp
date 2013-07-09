@@ -37,13 +37,13 @@ for (p in props) {
             event 'StatusUpdate', ['Is instanceof Set: ' + (p instanceof Set).toString()]
             if (grailsApp.isDomainClass(p.type)) {
                 event 'StatusUpdate', [p.type.name + ' is a domain class. Calling render.']
-                println renderEditor(p, prefix, 'create')
+                println renderEditor(p, prefix, 'create', false)
             } else if (p.type.name.equals("java.util.Set")) {
                 event 'StatusUpdate', ["Found generic type to be: " + p.referencedPropertyType + "."]
                 if (grailsApp.isDomainClass(p.referencedPropertyType)) {
                     event 'StatusUpdate', ["Generic type: " + p.type.name + ' is a domain class. Calling render.']
                     // println renderEditor(p, prefix, 'createMany') // To Do handle has many.
-                    println renderEditor(p, prefix, 'hasManyCreate')
+                    println renderEditor(p, prefix, 'hasManyCreate', false)
                 }
             } else {
                 event 'StatusUpdate', [p.type.name + " not a domain class, using default rendering."]
@@ -51,10 +51,10 @@ for (p in props) {
 <div class="control-group" data-ng-class="{error: errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}}">
     <label class="control-label" for="${prefix}\${${domainClass.name}SubPrefix}${p.name}">${p.naturalName}</label>
     <div class="controls">
-        ${renderEditor(p, prefix)}
+        ${renderEditor(p, prefix, null, false)}
         <span class="help-inline" data-ng-show="errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}">{{errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}}}</span>
     </div>
 </div>
-<input type="Button" value="Add" ng-click="addItem(${prefix}\${${domainClass.name}SubPrefix}${p.name})" />
+<input type="Button" value="Add" ng-click="addItem(\${subPrefix},['\${subPrefix}'])" />
 <% }  }   } %>
 

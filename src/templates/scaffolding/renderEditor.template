@@ -48,7 +48,7 @@
         sb << '<input type="checkbox"'
         sb << ' id="' << name << '"'
         sb << ' name="' << name << '"'
-        sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
+        sb << getNgDataModel(domainClass, name)
         sb << '>'
         sb as String
     }
@@ -60,7 +60,7 @@
             sb << ' type="range"'
 			sb << ' id="' << name << '"'
 			sb << ' name="' << name << '"'
-			sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
+			sb << getNgDataModel(domainClass, name)
 			sb << ' min="' << cp.range.from << '"'
 			sb << ' max="' << cp.range.to << '"'
 			sb << '<output for="' << name << '">{{' << name << '}}</output>'
@@ -69,7 +69,7 @@
 			else sb << ' type="number"'
 			sb << ' id="' << name << '"'
 			sb << ' name="' << name << '"'
-			sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
+			sb << getNgDataModel(domainClass, name)
 			if (cp.min != null) sb << ' min="' << cp.min << '"'
 			if (cp.max != null) sb << ' max="' << cp.max << '"'
 			if (isRequired()) sb << ' required'
@@ -83,7 +83,7 @@
         sb << '<input type="text"'
         sb << ' id="' << name << '"'
         sb << ' name="' << name << '"'
-        sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
+        sb << getNgDataModel(domainClass, name)
         if (cp.matches) sb << ' pattern="' << cp.matches << '"'
         if (isRequired()) sb << ' required'
         sb << '>'
@@ -110,5 +110,17 @@
 
     private String capitalizeFirstLetter(String input) {
         return input.substring(0, 1).toUpperCase() + input.substring(1)
+    }
+
+    private String getNgDataModel(domainClass, name) {
+        def sb = new StringBuilder()
+        sb << ' data-ng-model='
+        if (includeItem) {
+            sb << '"item.'
+        } else {
+            sb << '"'
+        }
+        sb << '${' << domainClass.name << 'SubPrefix}' << name << '"'
+        sb as String
     }
 %>

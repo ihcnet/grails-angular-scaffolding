@@ -121,7 +121,7 @@ class DeepAngularTemplateGenerator extends DefaultGrailsTemplateGenerator {
         super(classLoader)
     }
 
-    def renderEditor = { property, prefix, gspTemplateName = null ->
+    def renderEditor = { property, prefix, gspTemplateName = null, includeItem = true->
         def domainClass = property.domainClass
         def cp
         if (pluginManager?.hasGrailsPlugin('hibernate')) {
@@ -143,7 +143,8 @@ class DeepAngularTemplateGenerator extends DefaultGrailsTemplateGenerator {
                 prefix: prefix,
                 grailsApp: grailsApplication,
                 event: event,
-                gspTemplateName: gspTemplateName
+                gspTemplateName: gspTemplateName,
+                includeItem: includeItem
         ]
         renderEditorTemplate.make(binding).toString()
     }
