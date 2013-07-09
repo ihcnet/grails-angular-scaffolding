@@ -227,6 +227,24 @@ function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
             $location.path('/show/' + response.id);
         }, errorHandler.curry($scope, $location, Flash));
     };
+
+    $scope.addItem = function(itemToPush, pathToArrayItem) {
+//        for (var i = 0; i < pathToArrayItem.length; i++) {
+//            var currentItem = $scope.item;
+//
+//        }
+        var i = 0;
+        var currentItem = $scope.item;
+        while (i < pathToArrayItem.length) {
+            var associativeName = pathToArrayItem[i];
+            currentItem = currentItem[associativeName];
+        }
+        currentItem.push(itemToPush);
+    };
+
+    $scope.initArray = function(property) {
+        return [];
+    };
 }
 
 function EditCtrl($scope, $routeParams, $location, Grails, Flash) {

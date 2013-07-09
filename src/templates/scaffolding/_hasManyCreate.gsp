@@ -1,19 +1,19 @@
 <% import grails.persistence.Event %>
-<g:set var="thisSubPrefix" value="\${subPrefix ? subPrefix + '.' : ''}"/>
-    <%  excludedProps = Event.allEvents.toList() << 'version' << 'dateCreated' << 'lastUpdated'
-    persistentPropNames = domainClass.persistentProperties*.name
-    boolean hasHibernate = pluginManager?.hasGrailsPlugin('hibernate')
-    if (hasHibernate && org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsDomainBinder.getMapping(domainClass)?.identity?.generator == 'assigned') {
-        persistentPropNames << domainClass.identifier.name
-    }
-    props = domainClass.properties.findAll { persistentPropNames.contains(it.name) && !excludedProps.contains(it.name) }
-    Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
-    for (p in props) {
-        if (p.embedded) {
-            def embeddedPropNames = p.component.persistentProperties*.name
-            def embeddedProps = p.component.properties.findAll { embeddedPropNames.contains(it.name) && !excludedProps.contains(it.name) }
-            Collections.sort(embeddedProps, comparator.constructors[0].newInstance([p.component] as Object[]))
-    %><fieldset class="embedded"><legend>${p.naturalName}</legend><%
+<g:set var="${domainClass.name}SubPrefix" value="\${subPrefix ? subPrefix + '.' : ''}"/>
+<%  excludedProps = Event.allEvents.toList() << 'version' << 'dateCreated' << 'lastUpdated'
+persistentPropNames = domainClass.persistentProperties*.name
+boolean hasHibernate = pluginManager?.hasGrailsPlugin('hibernate')
+if (hasHibernate && org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsDomainBinder.getMapping(domainClass)?.identity?.generator == 'assigned') {
+    persistentPropNames << domainClass.identifier.name
+}
+props = domainClass.properties.findAll { persistentPropNames.contains(it.name) && !excludedProps.contains(it.name) }
+Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
+for (p in props) {
+    if (p.embedded) {
+        def embeddedPropNames = p.component.persistentProperties*.name
+        def embeddedProps = p.component.properties.findAll { embeddedPropNames.contains(it.name) && !excludedProps.contains(it.name) }
+        Collections.sort(embeddedProps, comparator.constructors[0].newInstance([p.component] as Object[]))
+%><fieldset class="embedded"><legend>${p.naturalName}</legend><%
         for (ep in p.component.properties) {
             if (!(ep.name in excludedProps)) renderFieldForProperty(ep, p.component, "${p.name}.")
         }
@@ -48,12 +48,13 @@
             } else {
                 event 'StatusUpdate', [p.type.name + " not a domain class, using default rendering."]
 %>
-    <div class="control-group" data-ng-class="{error: errors.${prefix}\${thisSubPrefix}${p.name}}">
-        <label class="control-label" for="${prefix}\${thisSubPrefix}${p.name}">${p.naturalName}</label>
-        <div class="controls">
-            ${renderEditor(p, prefix)}
-            <span class="help-inline" data-ng-show="errors.${prefix}\${thisSubPrefix}${p.name}">{{errors.${prefix}\${thisSubPrefix}${p.name}}}</span>
-        </div>
+<div class="control-group" data-ng-class="{error: errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}}">
+    <label class="control-label" for="${prefix}\${${domainClass.name}SubPrefix}${p.name}">${p.naturalName}</label>
+    <div class="controls">
+        ${renderEditor(p, prefix)}
+        <span class="help-inline" data-ng-show="errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}">{{errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}}}</span>
     </div>
+</div>
+<input type="Button" value="Add" ng-click="addItem(${prefix}\${${domainClass.name}SubPrefix}${p.name})" />
+<% }  }   } %>
 
-    <% }  }   } %>

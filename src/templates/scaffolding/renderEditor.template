@@ -38,11 +38,7 @@
         if (property.association) {
             def sb = new StringBuilder()
             //println "property.manyToOne: ${property.manyToOne.toString()} property.oneToMany: ${property.oneToMany.toString()} property.oneToOne: ${property.oneToOne.toString()} property.manyToMany: ${property.manyToMany.toString()} property.isOwningSide: ${property.isOwningSide().toString()} property.bidirectional: ${property.bidirectional.toString()}"
-            if (property.oneToMany) {
-                sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: \'' << name << '[0]\']" />'
-            } else {
-                sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: \'' << name << '\']" />'
-            }
+            sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: \'' << name << '\']" />'
             sb as String
         }
     }
@@ -52,7 +48,7 @@
         sb << '<input type="checkbox"'
         sb << ' id="' << name << '"'
         sb << ' name="' << name << '"'
-        sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
+        sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
         sb << '>'
         sb as String
     }
@@ -64,7 +60,7 @@
             sb << ' type="range"'
 			sb << ' id="' << name << '"'
 			sb << ' name="' << name << '"'
-			sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
+			sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
 			sb << ' min="' << cp.range.from << '"'
 			sb << ' max="' << cp.range.to << '"'
 			sb << '<output for="' << name << '">{{' << name << '}}</output>'
@@ -73,7 +69,7 @@
 			else sb << ' type="number"'
 			sb << ' id="' << name << '"'
 			sb << ' name="' << name << '"'
-			sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
+			sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
 			if (cp.min != null) sb << ' min="' << cp.min << '"'
 			if (cp.max != null) sb << ' max="' << cp.max << '"'
 			if (isRequired()) sb << ' required'
@@ -87,7 +83,7 @@
         sb << '<input type="text"'
         sb << ' id="' << name << '"'
         sb << ' name="' << name << '"'
-        sb << ' data-ng-model="item.${thisSubPrefix}' << name << '"'
+        sb << ' data-ng-model="item.${' << domainClass.name << 'SubPrefix}' << name << '"'
         if (cp.matches) sb << ' pattern="' << cp.matches << '"'
         if (isRequired()) sb << ' required'
         sb << '>'
