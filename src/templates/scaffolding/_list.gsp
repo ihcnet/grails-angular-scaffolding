@@ -27,4 +27,3 @@
         </tr>
     </tbody>
 </table>
-<div class="pagination pagination-centered" data-pagination data-total="total"></div>
