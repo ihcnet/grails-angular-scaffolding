@@ -55,6 +55,6 @@ for (p in props) {
         <span class="help-inline" data-ng-show="errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}">{{errors.${prefix}\${${domainClass.name}SubPrefix}${p.name}}}</span>
     </div>
 </div>
-<input type="Button" value="Add" ng-click="addItem(\${subPrefix}, \${'[\\'' + subPrefix.replaceAll('\\\\.', '\\',\\'') + '\\']'}" />
+<input type="Button" value="Add" ng-click="addItem(\${subPrefix}, \${'[\\'' + subPrefix.replaceAll('\\\\.', '\\',\\'') + '\\']'})" />
 <% }  }   } %>
 

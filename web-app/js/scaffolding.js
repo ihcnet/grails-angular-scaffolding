@@ -238,7 +238,13 @@ function CreateCtrl($scope, $routeParams, $location, Grails, Flash) {
                 $scope.item[pathToArrayItem[0]].push(itp);
                 break;
             case 2:
-                initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
+                if ($scope.item[pathToArrayItem[0]] === undefined) {
+                    $scope.item[pathToArrayItem[0]] = {};
+                }
+                if ($scope.item[pathToArrayItem[0]][pathToArrayItem[1]] === undefined) {
+                    $scope.item[pathToArrayItem[0]][pathToArrayItem[1]] = []
+                }
+                $scope.item[pathToArrayItem[0]][pathToArrayItem[1]].push(itp);
                 break;
             case 3:
                 initAndPushToArray($scope.item[pathToArrayItem[0]], itemToPush);
