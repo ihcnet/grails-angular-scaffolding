@@ -39,9 +39,11 @@
             def sb = new StringBuilder()
             //println "property.manyToOne: ${property.manyToOne.toString()} property.oneToMany: ${property.oneToMany.toString()} property.oneToOne: ${property.oneToOne.toString()} property.manyToMany: ${property.manyToMany.toString()} property.isOwningSide: ${property.isOwningSide().toString()} property.bidirectional: ${property.bidirectional.toString()}"
             if (property.oneToMany) {
-                sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/hasManyList" model="[subPrefix: \'' << name << '\']" />'
+                sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/hasManyList" model="[subPrefix: ' << domainClass.name << 'SubPrefix + \'' << name << '\']" />'
+                sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: ' << domainClass.name << 'SubPrefix + \'' << name << '\']" />'
+            } else {
+                sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: \'' << name << '\']" />'
             }
-            sb << '<g:render template="/ng-templates/' << property.referencedPropertyType.simpleName.toLowerCase() << '/' << gspTemplateName << '" model="[subPrefix: \'' << name << '\']" />'
             sb as String
         }
     }
